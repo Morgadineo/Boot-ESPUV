@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-container">
+    <header class="top-bar">
+        <a href="{{ url_for('index') }}" class="back-button">&#8592;</a>
+        <h1 class="title">UV</h1>
+    </header>
+
+    <div class="chip-image">
+        <img src="{{ url_for('static', filename='images/chip.png') }}" alt="ESP32 Chip">
+    </div>
+
+    <div class="login-box">
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+
+            <p>
+                {{ form.username.label }}<br>
+                {{ form.username(size=32) }}
+                {% for error in form.username.errors %} 
+                    <span class="error">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+
+            <p>
+                {{ form.password.label }}<br>
+                {{ form.password(size=32) }}
+                {% for error in form.password.errors %} 
+                    <span class="error">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+
+            <div class="button-group">
+                {{ form.submit(class_="form-button") }}
+            </div>
+
+            <div class="link-buttons">
+                <a href="#" class="small-button">Esqueci a senha</a>
+                <a href="{{ url_for('register') }}" class="small-button">Cadastre-se</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="contact-container">
+        <a href="#" class="contact-button">Contato</a>
+    </div>
+</div>
+{% endblock %}
