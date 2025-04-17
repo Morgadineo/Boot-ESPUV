@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Seus registros</h1>
+
+    <!-- Botão Voltar -->
+    <a href="{{ url_for('index') }}">← Voltar</a>
+
+    <!-- Título -->
+    <h2>UV</h2>
+
+    <!-- Tabela de registros -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>DATA V</th>
+                <th>HARDWARE</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>REG_1</td>
+                <td>"MODELO" 🟢</td>
+            </tr>
+            <tr>
+                <td>REG_2</td>
+                <td>"MODELO" 🟢</td>
+            </tr>
+            <tr>
+                <td>REG_3</td>
+                <td>"MODELO" 🔴</td>
+            </tr>
+            <tr>
+                <td>REG_4</td>
+                <td>"MODELO" 🟢</td>
+            </tr>
+            <tr>
+                <td>REG_5</td>
+                <td>"MODELO" 🟡</td>
+            </tr>
+            <tr>
+                <td>REG_6</td>
+                <td>"MODELO" 🔴</td>
+            </tr>
+            <tr>
+                <td>REG_7</td>
+                <td>"MODELO" 🟡</td>
+            </tr>
+            <tr>
+                <td>REG_8</td>
+                <td>"MODELO" 🟢</td>
+            </tr>
+            <tr>
+                <td>REG_9</td>
+                <td>"MODELO" 🟡</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
