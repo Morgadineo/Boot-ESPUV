@@ -1,0 +1,36 @@
+.container-estatistica {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.grafico-estatistica {
+    background-color: #d8b4fe;
+    border: 3px solid #9600ff;
+    border-radius: 15px;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    font-weight: bold;
+    margin-bottom: 5%;
+}
+
+.table-estatistica {
+    width: 80%; /* ou 70%, 60%, ajuste conforme desejar */
+    height: 40%;
+    margin: 0 auto; /* centraliza a tabela */
+    border-color: #9600ff;
+}
+
+.table-estatistica tr, td, th {
+    border-color: #9600ff;
+    border-width: 4px;
+    color: black;
+}
+

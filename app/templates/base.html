@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/registros.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/editar_registro.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estatistica.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/manual.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/edit_profile.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
+</head>
+
+<body>
+    <div class="header">
+        {% if exibir_botao_voltar %}
+        <a href="{{ url_for('index') }}">←</a>
+        {% endif %} 
+        <h1 class="global-title">UV</h1>
+    </div>
+
+    <!--
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
+    -->
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div class="footer">
+        
+    </div>
+</body>
+</html>
