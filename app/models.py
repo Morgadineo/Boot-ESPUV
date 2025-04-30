@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from typing import Optional
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from sqlalchemy import DateTime
+from sqlalchemy import DateTime, Integer
 from app import db
 from hashlib import md5
 from werkzeug.security import (
