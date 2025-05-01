@@ -23,7 +23,6 @@ class User(UserMixin, db.Model):
     """
 
     id             : so.Mapped[int] = so.mapped_column(primary_key = True)
-    name           : so.Mapped[str] = so.mapped_column(sa.String(100))
     username       : so.Mapped[str] = so.mapped_column(sa.String(100)) # Não presente na modelagem.
     password_hash: so.Mapped[str] = so.mapped_column(sa.String(256))
     email          : so.Mapped[str] = so.mapped_column(sa.String(120))
