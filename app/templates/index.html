@@ -6,12 +6,12 @@
                 <p>Aqui vai o gráfico UV</p>
             </div>
 
-            <div class="container-table">
-                <table class="table-dinamic">
+            <div id="container-table">
+                <table id="table-dinamic">
                     <thead>
                         <tr>
                             {% for columns in columns %}
-                                <th>{{ columns }}</th>
+                                <th class="col-head" >{{ columns }}</th>
                             {% endfor %}
                         </tr>
                     </thead>

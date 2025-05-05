@@ -2,14 +2,17 @@
 
 /* Parte principal */
 main {
-    flex: 1;  /* Faz o main ocupar o espaço restante */
+    flex: 1;
+    /* Faz o main ocupar o espaço restante */
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 40px;
-    overflow-y: auto;  /* Adiciona rolagem ao conteúdo se necessário */
-    width: 100%; /* Garante que o main ocupe 100% da largura disponível */
+    overflow-y: auto;
+    /* Adiciona rolagem ao conteúdo se necessário */
+    width: 100%;
+    /* Garante que o main ocupe 100% da largura disponível */
 }
 
 /* Gráfico UV */
@@ -27,34 +30,52 @@ main {
 }
 
 /* Lista de Registros */
-#lista-registros ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    background-color: #d8b4fe;
-    border: 3px solid #9600ff;
-    border-radius: 15px;
-    width: 250px;
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    background-color: #f5f5f5;
 }
 
-#lista-registros li {
-    border-bottom: 1px solid #9600ff;
-    padding: 10px;
-    font-weight: bold;
-    color: black;
-    text-align: center;
+#container-table {
+    width: 95%;
+    max-width: 1200px;
+    margin: 20px 0;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: white;
 }
 
-#lista-registros li:last-child {
-    border-bottom: none;
+#table-dinamic {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
 }
 
-#lista-registros a {
-    font-size: 16px;
-    text-align: center;
-    text-decoration: none;
-    color: black;
-    margin: 0px;
+#table-dinamic .col-head {
+    background-color: #e6e6e6;
+    padding: 8px 10px;
+    text-align: left;
+    border: 1px solid #d4d4d4;
+    font-weight: normal;
+}
+
+#table-dinamic td {
+    padding: 6px 10px;
+    border: 1px solid #e0e0e0;
+}
+
+#table-dinamic tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+#table-dinamic tbody tr:hover {
+    background-color: #e6f7ff;
 }
 
 /* Botão da API */
@@ -71,7 +92,8 @@ form button {
 
 /* Barra lateral */
 aside {
-    width: 250px;  /* Define a largura do aside */
+    width: 250px;
+    /* Define a largura do aside */
     background-color: #9600ff;
     display: flex;
     flex-direction: column;
@@ -79,8 +101,10 @@ aside {
     padding: 10px 0;
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
-    height: 70%;  /* O aside ocupa o restante da altura disponível */
-    position: relative;  /* Agora o aside se posiciona de forma normal no fluxo */
+    height: 70%;
+    /* O aside ocupa o restante da altura disponível */
+    position: relative;
+    /* Agora o aside se posiciona de forma normal no fluxo */
 }
 
 /* Navegação no aside */
@@ -106,6 +130,3 @@ aside nav ul li a {
     color: black;
     text-decoration: none;
 }
-
-
-
