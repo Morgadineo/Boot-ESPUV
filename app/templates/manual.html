@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="div-manual">
+    <!-- Título da página -->
+    <div class="div-titulo">
+        <h3>MANUAIS</h3>
+    </div>
+
+    <!-- Seção de lista de manuais -->
+    <div class="div-cabecalho">
+        <h4># Manuais</h4>
+        <p>Manual de uso</p>
+        <p>Guia sensor UV</p>
+        <p>Como utilizar os dados</p>
+        <p>.....</p>
+    </div>
+    
+    <!-- Seção de visualização do documento -->
+    <div class="div-doc" display="flex">
+        <div class="div-lateral">
+            <p>1</p>
+            <p>2</p>
+            <p>3</p>
+            <p>4</p>
+            <p>5</p>
+            <p>6</p>
+            <p>7</p>
+            <p>8</p>
+        </div>
+        <div class="div-vizualizacao">
+            <p><strong>Visualização do documento</strong></p>
+            <p>..........</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
