@@ -17,11 +17,29 @@
 </head>
 
 <body>
+    <!-- Cabeçalho com Barra de Navegação -->
+    <header class="top-nav">
+        <div class="header-content">
+            {% if exibir_botao_voltar %}
+            <a href="{{ url_for('index') }}" class="back-button">←</a>
+            {% endif %}
+            <h1 class="global-title">ESP UV</h1>
+            
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="{{ url_for('index') }}" title="Página Inicial">⌂ Início</a></li>
+                    <li><a href="{{ url_for('user', username=current_user.username) }}" title="Perfil">👤 Perfil</a></li>
+                    <li><a href="{{ url_for('registros') }}" title="Registros">📋 Registros</a></li>
+                    <li><a href="{{ url_for('estatistica') }}" title="Estatísticas">📊 Estatísticas</a></li>
+                    <li><a href="{{ url_for('manual') }}" title="Ajuda">❓ Ajuda</a></li>
+                    <li><a href="{{ url_for('logout') }}" title="Sair">🚪 Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
     <div class="header">
-        {% if exibir_botao_voltar %}
-        <a href="{{ url_for('index') }}">←</a>
-        {% endif %} 
-        <h1 class="global-title">UV</h1>
+        <h1 class="global-title">Coleta de raios Ultra-Violeta</h1>
     </div>
 
     <!--
@@ -45,4 +63,26 @@
         
     </div>
 </body>
-</html>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('uvChart');
+    new Chart(ctx, {
+        type: 'line',
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    document.querySelector('.placeholder-text').style.display = 'none';
+});
+
+</script></html>
+

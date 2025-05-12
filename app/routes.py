@@ -4,7 +4,7 @@ from urllib.parse import urlsplit
 from app          import app, db
 from flask        import render_template, flash, redirect, url_for, request
 from app.forms    import LoginForm, RegistrationForm, EditProfileForm
-from app.models   import User, UVRegister, Arduino
+from app.models   import User, UVRegister, Arduino, Location
 from datetime     import datetime, timezone
 
 from flask_login import login_user, logout_user, current_user, login_required
@@ -15,8 +15,8 @@ import sqlalchemy as sa
 @app.route('/index')
 @login_required
 def index():
-    registers = db.session.query(UVRegister).all()
-
+    registers = db.session.query(UVRegister, Location)\
+                .join(Location, UVRegister.location_id == Location.id).all()
     return render_template('index.html', registers=registers)
 
 @app.route('/login', methods=('GET', 'POST'))

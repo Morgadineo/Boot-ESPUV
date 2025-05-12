@@ -1,34 +1,116 @@
 {% extends "base.html" %}
 
 {% block content %}
-<main>
+<main class="main-content">
+    <!-- Área do Gráfico -->
     <div id="grafico-uv">
-        <p>Aqui vai o gráfico UV</p>
+        <h3>Monitoramento UV</h3>
+        <canvas id="uvChart"></canvas>
+        <p class="placeholder-text">Dados serão plotados automaticamente</p>
     </div>
 
+    <!-- Tabela de Dados -->
     <div id="container-table">
-        <table id="table-dinamic">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Arduino</th>
-                    <th>Data</th>
-                    <th>Localização</th>
-                    <th>Frequência UV</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for registro in registers %}
-                <tr>
-                    <td>{{ registro.id }}</td>
-                    <td>{{ registro.arduino_id }}</td>
-                    <td>{{ registro.register_date.strftime('%d/%m/%Y %H:%M') }}</td>
-                    <td>{{ registro.location_id }}</td>
-                    <td>{{ registro.frequency }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <table id="table-dinamic">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Arduino</th>
+                <th>Data</th>
+                <th>Localização</th>
+                <th>Frequência<br>(mW/cm²)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for uv_register, location in registers %}
+            <tr>
+                <td>{{ uv_register.id }}</td>
+                <td>Arduino #{{ uv_register.arduino_id }}</td>
+                <td>{{ uv_register.register_date.strftime('%d/%m/%Y %H:%M') }}</td>
+                <td>
+                    <div class="location-cell">
+                        <span class="city">{{ location.city }}</span>
+                        <span class="state">{{ location.state }}</span>
+                    </div>
+                </td>
+                <td class="frequency">{{ uv_register.frequency }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     </div>
 </main>
+{% endblock %}
+
+{% block scripts %}
+<!-- Carrega Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('uvChart');
+    const placeholder = document.querySelector('.placeholder-text');
+    
+    try {
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for uv_register, location in registers %}
+                    "{{ uv_register.register_date.strftime('%d/%m %H:%M') }}"{% if not loop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Frequência UV',
+                    data: [
+                        {% for uv_register, location in registers %}
+                        {{ uv_register.frequency }}{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    ],
+                    borderColor: '#9600ff',
+                    backgroundColor: 'rgba(150, 0, 255, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y.toFixed(2) + ' mW/cm²';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Intensidade UV (mW/cm²)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Data e Hora'
+                        }
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Erro ao carregar gráfico:', error);
+        placeholder.style.display = 'block';
+        ctx.style.display = 'none';
+    }
+});
+</script>
 {% endblock %}

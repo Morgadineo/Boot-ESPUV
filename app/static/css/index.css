@@ -1,183 +1,96 @@
-/* Estilização específica da página Home (index.html) */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-
-body {
-    font-family: 'Inter', sans-serif;
-}
-
-/* Parte principal */
-main {
-    flex: 1;
-    /* Faz o main ocupar o espaço restante */
-    padding: 20px;
+.main-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 40px;
-    overflow-y: auto;
-    /* Adiciona rolagem ao conteúdo se necessário */
+    padding: 2rem 1rem;
     width: 100%;
-    /* Garante que o main ocupe 100% da largura disponível */
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 2rem;
 }
 
-/* Gráfico UV */
 #grafico-uv {
-    background-color: #dff4f7;
-    border: 3px solid #9600ff;
+    width: 100%;
+    max-width: 900px;
+    background-color: #f8f9fa;
     border-radius: 15px;
-    width: 250px;
-    height: 250px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    color: #2e1065;
-    font-weight: bold;
 }
 
-/* Lista de Registros */
-body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    background-color: #f5f5f5;
+#uvChart {
+    width: 100% !important;
+    height: 300px !important;
 }
 
 #container-table {
-    width: 95%;
-    max-width: 1200px;
-    margin: 20px 0;
-    max-height: 80vh;
-    overflow-y: auto;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    overflow-x: auto;
     background-color: white;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-
-
+    padding: 1rem;
 }
-
 
 #table-dinamic {
     width: 100%;
     border-collapse: collapse;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 0.9em;
+    font-family: 'Inter', sans-serif;
+    table-layout: fixed;
 }
 
+#table-dinamic th:nth-child(1),
+#table-dinamic td:nth-child(1) {
+    width: 8%;
+    /* ID */
+}
 
+#table-dinamic th:nth-child(2),
+#table-dinamic td:nth-child(2) {
+    width: 15%;
+    /* Arduino */
+}
 
-#table-dinamic .col-head {
+#table-dinamic th:nth-child(3),
+#table-dinamic td:nth-child(3) {
+    width: 25%;
+    /* Data */
+}
+
+#table-dinamic th:nth-child(4),
+#table-dinamic td:nth-child(4) {
+    width: 32%;
+    /* Localização */
+}
+
+#table-dinamic th:nth-child(5),
+#table-dinamic td:nth-child(5) {
+    width: 20%;
+    /* Frequência */
+}
+
+/* Melhorias visuais */
+#table-dinamic th {
     background-color: #9600ff;
-    /* Roxo da paleta */
     color: white;
-    /* Texto branco */
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-
-#table-dinamic td {
-    padding: 10px 15px;
-    line-height: 1.5;
-}
-
-#table-dinamic thead th {
+    padding: 1rem;
+    text-align: center;
     position: sticky;
     top: 0;
-    z-index: 1;
-    background-color: var(--roxo-claro);
+    font-weight: 500;
 }
 
-#table-dinamic tbody tr:nth-child(odd) {
-    background-color: #f9f9f9;
-}
-
-#table-dinamic tbody tr:hover {
-    background-color: #f0e9ff;
-    cursor: default;
-}
-
-#table-dinamic tbody tr td:first-child {
-    border-left: 2px solid #9600ff;
-}
-
-#table-dinamic tbody tr td:last-child {
-    border-right: 2px solid #9600ff;
-}
-
-#table-dinamic td.center {
+#table-dinamic td {
+    color: #000000;
+    padding: 0.8rem 0.5rem;
+    border-bottom: 1px solid #eee;
     text-align: center;
+    word-wrap: break-word;
 }
 
-
-
-/* Botão da API */
-form button {
-    background-color: #d8b4fe;
-    color: black;
-    border: none;
-    padding: 15px 30px;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+#table-dinamic tr:hover {
+    background-color: #f8f5ff;
 }
-
-form button:hover {
-    background-color: var(--roxo-base);
-    color: white;
-    transform: scale(1.05);
-}
-
-/* Barra lateral */
-aside {
-    width: 250px;
-    /* Define a largura do aside */
-    background-color: #9600ff;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
-    height: 70%;
-    /* O aside ocupa o restante da altura disponível */
-    position: relative;
-    /* Agora o aside se posiciona de forma normal no fluxo */
-}
-
-/* Navegação no aside */
-aside nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-aside nav ul li {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 0;
-    font-weight: bold;
-}
-
-aside nav ul li a {
-    color: white;
-    transition: color 0.3s ease;
-}
-
-aside nav ul li a:hover {
-    color: #ffd6ff;
-}
-
-
-
