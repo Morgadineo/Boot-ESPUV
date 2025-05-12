@@ -1,7 +1,0 @@
-pyproject.toml
-src/abu.py
-src/U.egg-info/PKG-INFO
-src/U.egg-info/SOURCES.txt
-src/U.egg-info/dependency_links.txt
-src/U.egg-info/requires.txt
-src/U.egg-info/top_level.txt
