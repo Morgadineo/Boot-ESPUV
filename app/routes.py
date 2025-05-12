@@ -15,10 +15,9 @@ import sqlalchemy as sa
 @app.route('/index')
 @login_required
 def index():
-    columns  : list[str] = UVRegister.__table__.columns.keys()
     registers = db.session.query(UVRegister).all()
 
-    return render_template('index.html', columns=columns, registers=registers)
+    return render_template('index.html', registers=registers)
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
@@ -55,7 +54,7 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        user = User(username = form.username.data, email = form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
