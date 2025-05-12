@@ -23,6 +23,7 @@ dependencies = [
     "executing",
     "greenlet",
     "ipython",
+    "flask-shell-ipython",
     "ipython_pygments_lexers",
     "itsdangerous",
     "jedi",
@@ -47,12 +48,12 @@ dependencies = [
 
 # "LICENSE" is name of the license file, which must be in root of project folder
 #license = {file = "LICENSE"}
-#authors = [
-#    {name = "Arthur Morgado", email = "wanderson.santana@uvv.br"},
-     {name = "Rian Novelli", email = "wanderson.santana@uvv.br"}
-     {name = "Tales Paiva", email = "wanderson.santana@uvv.br"}
+authors = [
+     {name = "Arthur Morgado", email = "arthurmorgado7751@gmail.com"},
+     {name = "Rian Novelli", email = "wanderson.santana@uvv.br"},
+     {name = "Tales Paiva", email = "wanderson.santana@uvv.br"},
 
-#]
+]
 #dynamic = ["version", "description"]
 
 # Required dependencies for install/usage of your package or application

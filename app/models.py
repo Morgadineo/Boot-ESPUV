@@ -54,7 +54,7 @@ def load_user(id):
     return db.session.get(User, int(id))
 
 class Post(db.Model):
-    id       : so.Mapped[int]      = so.mapped_column(primary_key=True)
+    id       : so.Mapped[int]      = so.mapped_column(primary_key = True, autoincrement = True)
     body     : so.Mapped[str]      = so.mapped_column(sa.String(140))
     timestamp: so.Mapped[datetime] = so.mapped_column(
         index=True, default=lambda: datetime.now(timezone.utc)
@@ -76,7 +76,7 @@ class Arduino(db.Model):
     register_day: Dia de cadastro do arduino na plataforma.
     """
 
-    id          : so.Mapped[int]      = so.mapped_column(primary_key = True)
+    id          : so.Mapped[int]      = so.mapped_column(primary_key = True, autoincrement = True)
     user_id     : so.Mapped[int]      = so.mapped_column(sa.ForeignKey(User.id),
                                                index = True)
     register_day: so.Mapped[datetime] = so.mapped_column(sa.DateTime)
@@ -98,7 +98,7 @@ class Location(db.Model):
 
     """
 
-    id       : so.Mapped[int]   = so.mapped_column(primary_key = True)
+    id       : so.Mapped[int]   = so.mapped_column(primary_key = True, autoincrement = True)
     country  : so.Mapped[str]   = so.mapped_column(sa.String(40))
     state    : so.Mapped[str]   = so.mapped_column(sa.String(40))
     city     : so.Mapped[str]   = so.mapped_column(sa.String(40))
@@ -119,7 +119,7 @@ class UVRegister(db.Model):
     frequency    : Frequência do raio UV coletada.
     """
 
-    id           : so.Mapped[int]          = so.mapped_column(primary_key = True)
+    id           : so.Mapped[int]          = so.mapped_column(primary_key = True, autoincrement = True)
     arduino_id   : so.Mapped[int]          = so.mapped_column(sa.ForeignKey(Arduino.id))
     register_date: so.Mapped[sa.DateTime]  = so.mapped_column(sa.DateTime(timezone = True))
     location_id  : so.Mapped[int]          = so.mapped_column(sa.ForeignKey(Location.id))
@@ -136,7 +136,7 @@ class Category(db.Model):
     name: Nome da categoria. Exemplos: Sensor; LED; LCD; Microcontrolador.
     """
 
-    id  : so.Mapped[int] = so.mapped_column(primary_key = True)
+    id  : so.Mapped[int] = so.mapped_column(primary_key = True, autoincrement = True)
     name: so.Mapped[str] = so.mapped_column()
 
 
@@ -151,7 +151,7 @@ class Components(db.Model):
     especifies : Texto com as especificações do componente.
     """
 
-    id         : so.Mapped[int]   = so.mapped_column(primary_key = True)
+    id         : so.Mapped[int]   = so.mapped_column(primary_key = True, autoincrement = True)
     name       : so.Mapped[str]   = so.mapped_column(sa.String(30))
     category_id: so.Mapped[int]   = so.mapped_column(sa.ForeignKey(Category.id))
     price      : so.Mapped[float] = so.mapped_column()

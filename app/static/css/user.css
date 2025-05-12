@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #ffffff;
+    background-color: #2e2e2e;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #eee;
 }
@@ -91,7 +91,7 @@ body {
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 
@@ -100,7 +100,7 @@ body {
     border-radius: 12px;
     padding: 15px;
     margin-bottom: 15px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .post-header {
@@ -127,5 +127,6 @@ body {
 .post-body {
     color: #ccc;
     font-size: 0.95rem;
-    margin-left: 46px; /* alinhado certinho abaixo do autor */
+    margin-left: 46px;
+    /* alinhado certinho abaixo do autor */
 }

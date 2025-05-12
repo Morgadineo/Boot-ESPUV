@@ -1,11 +1,11 @@
 # app/routes.py
 
 from urllib.parse import urlsplit
-from app import app, db
-from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, RegistrationForm, EditProfileForm
-from app.models import User, UVRegister
-from datetime import datetime, timezone
+from app          import app, db
+from flask        import render_template, flash, redirect, url_for, request
+from app.forms    import LoginForm, RegistrationForm, EditProfileForm
+from app.models   import User, UVRegister, Arduino
+from datetime     import datetime, timezone
 
 from flask_login import login_user, logout_user, current_user, login_required
 import sqlalchemy as sa
@@ -93,7 +93,12 @@ def edit_profile():
 @app.route('/registros')
 @login_required
 def registros():
-    return render_template('registros.html', title='Seus Registros', exibir_botao_voltar=True)
+    registros = db.session.scalars(
+        sa.select(UVRegister)
+        .join(Arduino)
+        .where(Arduino.user_id == current_user.id)
+    ).all()
+    return render_template('registros.html', registros=registros)
 
 @app.route('/editar_registro')
 def editar_registro():
