@@ -1,50 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
-        <main>
-            <div id="grafico-uv">
-                <p>Aqui vai o gráfico UV</p>
-            </div>
+<main>
+    <div id="grafico-uv">
+        <p>Aqui vai o gráfico UV</p>
+    </div>
 
-            <div id="container-table">
-                <table id="table-dinamic">
-                    <thead>
-                        <tr>
-                            {% for columns in columns %}
-                                <th class="col-head" >{{ columns }}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for register in registers %}
-                            <tr>
-                                {% for columns in columns %}
-                                    <td>{{ getattr(register, columns) }}</td>
-                                {% endfor %}
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <form action="" method="post">
-                <button type="submit">API</button>
-            </form>
-        </main>
-        
-        <!-- Barra lateral -->
-        <aside>
-            <nav>
-                <ul>
-                    <li><a href="{{ url_for('user', username=current_user.username) }}">Perfil</a></li>
-                    <li><a href="">ARD</a></li>
-                    <li><a href="{{ url_for('estatistica') }}">EST</a></li>
-                    <li><a href="{{ url_for('registros') }}">REG</a></li>
-                    <li><a href="">DOC</a></li>
-                    <li><a href="">⚙ Configurações</a></li>
-                    <li><a href="{{ url_for('manual') }}">❓ Ajuda</a></li>
-                    <li><a href="{{ url_for('logout') }}">⮐ Sair</a></li>
-                </ul>
-            </nav>
-        </aside>
+    <div id="container-table">
+        <table id="table-dinamic">
+            <thead>
+                <tr>
+                    <!-- Cabeçalhos fixos (mais legíveis que os nomes das colunas) -->
+                    <th>ID</th>
+                    <th>Arduino</th>
+                    <th>Data</th>
+                    <th>Localização</th>
+                    <th>Frequência UV</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registers %}
+                <tr>
+                    <td>{{ registro.id }}</td>
+                    <td>{{ registro.arduino_id }}</td>
+                    <td>{{ registro.register_date.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>{{ registro.location_id }}</td>
+                    <td>{{ registro.frequency }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
 {% endblock %}
