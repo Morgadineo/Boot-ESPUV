@@ -49,7 +49,7 @@ def data_example():
         price       =120.0,
         especifies  = "Sensor UV de 240-370nm"
     )
-    db.session.add(component)
+    db.session.add(sensor_uv)
     db.session.commit()  # Persiste tudo de uma vez
 
     arduino_component = Arduino_Components(

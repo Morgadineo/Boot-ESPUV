@@ -4,9 +4,55 @@
 <main class="main-content">
     <!-- Área do Gráfico -->
     <div id="grafico-uv">
-        <h3>Monitoramento UV</h3>
-        <canvas id="uvChart"></canvas>
-        <p class="placeholder-text">Dados serão plotados automaticamente</p>
+        <canvas id="uvChart" height="150" ></canvas>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('uvChart').getContext('2d');
+    
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ labels|tojson }},
+            datasets: [{
+                label: 'Registros por dia',
+                data: {{ values|tojson }},
+                backgroundColor: '#9600ff',
+                borderColor: '#7600cc',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0,  // Força números inteiros
+                        stepSize: 1    // Incremento de 1 em 1
+                    },
+                    grid: {
+                        display: true,
+                        drawOnChartArea: false,  // Remove linhas internas
+                        drawTicks: true          // Mantém linhas no topo
+                    }
+                },
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.parsed.y + ' registro(s)';
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+    </script>
     </div>
 
     <!-- Tabela de Dados -->
@@ -42,75 +88,3 @@
 </main>
 {% endblock %}
 
-{% block scripts %}
-<!-- Carrega Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('uvChart');
-    const placeholder = document.querySelector('.placeholder-text');
-    
-    try {
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [
-                    {% for uv_register, location in registers %}
-                    "{{ uv_register.register_date.strftime('%d/%m %H:%M') }}"{% if not loop.last %},{% endif %}
-                    {% endfor %}
-                ],
-                datasets: [{
-                    label: 'Frequência UV',
-                    data: [
-                        {% for uv_register, location in registers %}
-                        {{ uv_register.frequency }}{% if not loop.last %},{% endif %}
-                        {% endfor %}
-                    ],
-                    borderColor: '#9600ff',
-                    backgroundColor: 'rgba(150, 0, 255, 0.1)',
-                    borderWidth: 2,
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.parsed.y.toFixed(2) + ' mW/cm²';
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        title: {
-                            display: true,
-                            text: 'Intensidade UV (mW/cm²)'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Data e Hora'
-                        }
-                    }
-                }
-            }
-        });
-    } catch (error) {
-        console.error('Erro ao carregar gráfico:', error);
-        placeholder.style.display = 'block';
-        ctx.style.display = 'none';
-    }
-});
-</script>
-{% endblock %}

@@ -21,10 +21,23 @@
     align-items: center;
 }
 
+/* Estilos do Gráfico */
 #uvChart {
-    width: 100% !important;
-    height: 300px !important;
+    transition: all 0.3s ease;
 }
+
+#grafico-uv:hover #uvChart {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Tooltip personalizado */
+.chartjs-tooltip {
+    background: rgba(0, 0, 0, 0.7) !important;
+    border-radius: 8px !important;
+    padding: 10px 15px !important;
+}
+
 
 #container-table {
     max-width: 1000px;

@@ -165,7 +165,9 @@ class Arduino_Components(db.Model):
     arduino_id  : Identificador único do arduino.
     component_id: Identificador único do componente pertence a um arduino.
     """
+    __tablename__ = "arduino_components"
 
     arduino_id  : so.Mapped[int] = so.mapped_column(sa.ForeignKey(Arduino.id), primary_key = True)
-    component_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Components.id))
+    component_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Components.id), primary_key = True)
+    quantity    : so.Mapped[int] = so.mapped_column()
 

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="registros-container">
+    <div class="arduinos-section" style="max-width: 1000px;">
+        <div class="assembly-title">
+            Detalhes do Arduino #{{ arduino.id }}
+            <div class="subtitle">Cadastrado em: {{ arduino.register_day.strftime('%d/%m/%Y %H:%M') }}</div>
+        </div>
+
+        <div class="components-section">
+            <h3 class="section-title">Componentes</h3>
+            <div class="components-table-container">
+                <table class="components-table">
+                    <thead>
+                        <tr>
+                            <th>Componente</th>
+                            <th>Categoria</th>
+                            <th>Quantidade</th>
+                            <th>Preço Unitário</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for arduino_component, component, category in components %}
+                        <tr>
+                            <td>{{ component.name }}</td>
+                            <td>{{ category.name }}</td>
+                            <td>{{ arduino_component.quantity }}</td>
+                            <td>R$ {{ "%.2f"|format(component.price) }}</td>
+                            <td>R$ {{ "%.2f"|format(component.price * arduino_component.quantity) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="total-label">Total:</td>
+                            <td class="total-value">R$ {{ "%.2f"|format(total) }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="{{ url_for('assembly_arduinos') }}" class="btn-submit">
+                Voltar para lista de Arduinos
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

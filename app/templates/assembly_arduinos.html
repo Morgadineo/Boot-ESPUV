@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="registros-container">
+    <!-- Coluna principal para montagem -->
+    <div class="assembly-column">
+        <div class="assembly-title">Montagem de Arduino</div>
+        
+        <form method="POST" id="arduino-form">
+            {% for category_data in categories_with_components %}
+            <div class="category-dropdown">
+                <div class="dropdown-header">
+                    <span>{{ category_data.category.name }}</span>
+                    <span>▼</span>
+                </div>
+                <div class="dropdown-content">
+                    {% for component in category_data.components %}
+                    <div class="component-item">
+                        <span>{{ component.name }} (R$ {{ "%.2f"|format(component.price) }})</span>
+                        <div class="quantity-controls">
+                            <input type="number" 
+                                   name="component_{{ component.id }}" 
+                                   min="0" 
+                                   value="0"
+                                   class="quantity-input"
+                                   data-component-id="{{ component.id }}"
+                                   data-component-name="{{ component.name }}"
+                                   data-component-price="{{ component.price }}">
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn-submit">Montar Arduino</button>
+        </form>
+    </div>
+    
+    <!-- Coluna lateral com componentes selecionados -->
+    <div class="selected-components-column">
+        <h3>Seu Arduino</h3>
+        <div class="selected-components">
+            <div class="selected-title">Componentes Utilizados</div>
+            <div id="selected-components-list" class="selected-list">
+                <!-- Aqui serão inseridos os componentes dinamicamente via JavaScript -->
+                <p class="empty-message">Nenhum componente selecionado ainda</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const quantityInputs = document.querySelectorAll('.quantity-input');
+    const selectedList = document.getElementById('selected-components-list');
+    
+    quantityInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            updateSelectedComponents();
+        });
+    });
+    
+    function updateSelectedComponents() {
+        // Limpa a lista
+        selectedList.innerHTML = '';
+        
+        let hasComponents = false;
+        let total = 0;
+        
+        // Percorre todos os inputs
+        quantityInputs.forEach(input => {
+            const quantity = parseInt(input.value);
+            if (quantity > 0) {
+                hasComponents = true;
+                const name = input.dataset.componentName;
+                const price = parseFloat(input.dataset.componentPrice);
+                total += price * quantity;
+                
+                // Cria elemento para o componente selecionado
+                const item = document.createElement('div');
+                item.className = 'selected-item';
+                item.innerHTML = `
+                    <span class="selected-item-name">${name}</span>
+                    <span class="selected-item-qty">${quantity}x</span>
+                `;
+                selectedList.appendChild(item);
+            }
+        });
+        
+        // Se não houver componentes, mostra mensagem
+        if (!hasComponents) {
+            selectedList.innerHTML = '<p class="empty-message">Nenhum componente selecionado ainda</p>';
+        } else {
+            // Adiciona o total
+            const totalElement = document.createElement('div');
+            totalElement.className = 'selected-total';
+            totalElement.innerHTML = `
+                <span>Total:</span>
+                <span>R$ ${total.toFixed(2)}</span>
+            `;
+            selectedList.appendChild(totalElement);
+        }
+    }
+});
+</script>
+{% endblock %}

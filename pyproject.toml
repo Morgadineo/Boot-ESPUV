@@ -28,6 +28,7 @@ dependencies = [
     "itsdangerous",
     "jedi",
     "Jinja2",
+    "pandas",
     "Mako",
     "MarkupSafe",
     "matplotlib-inline",
