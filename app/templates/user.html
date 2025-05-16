@@ -1,30 +1,221 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="profile-container">
-    <div class="user-card">
-        <img class="avatar" src="{{ user.avatar(128) }}" alt="User Avatar">
-        <div class="user-info">
-            <h1>{{ user.username }}</h1>
-            {% if user.about_me %}
-                <p class="about-me">{{ user.about_me }}</p>
-            {% endif %}
-            {% if user.last_seen %}
-                <p class="last-seen">Last seen: {{ user.last_seen.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-            {% endif %}
-            {% if user == current_user %}
-                <a class="edit-profile-btn" href="{{ url_for('edit_profile') }}">Edit Profile</a>
-            {% endif %}
+<div class="container py-4">
+    <!-- Cabeçalho do Perfil -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <img src="{{ user.avatar(128) }}" class="rounded-circle me-4" width="128" height="128" alt="Avatar">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h1 class="h3 mb-1">{{ user.username }}</h1>
+                            {% if user.about_me %}
+                                <p class="text-muted mb-2">{{ user.about_me }}</p>
+                            {% endif %}
+                            <small class="text-muted">
+                                <i class="bi bi-clock-history me-1"></i>
+                                Último acesso: {{ user.last_seen.strftime('%d/%m/%Y %H:%M') }}
+                            </small>
+                        </div>
+                        {% if user == current_user %}
+                            <a href="{{ url_for('edit_profile') }}" class="btn btn-outline-primary">
+                                <i class="bi bi-pencil-square me-1"></i>Editar Perfil
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="posts-container">
-        <h2>Posts</h2>
-        {% for post in posts %}
-            <div class="post">
-                {% include '_post.html' %}
+    <!-- Abas de Navegação -->
+    <ul class="nav nav-tabs mb-4" id="profileTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts" type="button">
+                <i class="bi bi-chat-square-text me-1"></i>Posts ({{ posts|length }})
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="arduinos-tab" data-bs-toggle="tab" data-bs-target="#arduinos" type="button">
+                <i class="bi bi-cpu me-1"></i>Arduinos ({{ arduinos_componentes|length }})
+            </button>
+        </li>
+    </ul>
+
+    <!-- Conteúdo das Abas -->
+    <div class="tab-content">
+        <!-- Tab Posts -->
+        <div class="tab-pane fade show active" id="posts" role="tabpanel">
+            {% if posts %}
+                <div class="list-group">
+                    {% for post in posts %}
+                        <div class="list-group-item mb-3 rounded shadow-sm">
+                            {% include '_post.html' %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>Nenhum post encontrado.
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Tab Arduinos -->
+        <div class="tab-pane fade" id="arduinos" role="tabpanel">
+            {% if arduinos_componentes %}
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                    {% for arduino, componentes in arduinos_componentes %}
+                        <div class="col">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">
+                                        <i class="bi bi-cpu me-2"></i>Arduino #{{ arduino.id }}
+                                    </h5>
+                                    {% if user == current_user %}
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" 
+                                                type="button" data-bs-toggle="dropdown">
+                                            <i class="bi bi-gear"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li>
+                                                <a class="dropdown-item" href="{{ url_for('arduino_detalhes', arduino_id=arduino.id) }}">
+                                                    <i class="bi bi-eye me-2"></i>Detalhes
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" 
+                                                   data-bs-target="#editArduinoModal{{ arduino.id }}">
+                                                    <i class="bi bi-pencil me-2"></i>Editar
+                                                </a>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" 
+                                                   data-bs-target="#deleteArduinoModal{{ arduino.id }}">
+                                                    <i class="bi bi-trash me-2"></i>Excluir
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <small class="text-muted">Cadastrado em:</small>
+                                        <p>{{ arduino.register_day.strftime('%d/%m/%Y') }}</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <small class="text-muted">Componentes:</small>
+                                        <ul class="list-group list-group-flush">
+                                            {% for ac, component, category in componentes %}
+                                                <li class="list-group-item d-flex justify-content-between align-items-center py-2">
+                                                    {{ component.name }} ({{ category.name }})
+                                                    <span class="badge bg-primary rounded-pill">{{ ac.quantity }}x</span>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-transparent">
+                                    <a href="{{ url_for('arduino_detalhes', arduino_id=arduino.id) }}" 
+                                       class="btn btn-sm btn-outline-primary w-100">
+                                        <i class="bi bi-zoom-in me-1"></i>Ver Detalhes
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Modal de Edição -->
+                            <div class="modal fade" id="editArduinoModal{{ arduino.id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Editar Arduino #{{ arduino.id }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="editArduinoForm{{ arduino.id }}" 
+                                                  action="{{ url_for('editar_arduino', arduino_id=arduino.id) }}" 
+                                                  method="POST">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Data de Cadastro</label>
+                                                    <input type="date" class="form-control" name="register_day" 
+                                                           value="{{ arduino.register_day.strftime('%Y-%m-%d') }}">
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" form="editArduinoForm{{ arduino.id }}" 
+                                                    class="btn btn-primary">Salvar Alterações</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal de Exclusão -->
+                            <!-- Modal de Exclusão -->
+<div class="modal fade" id="deleteArduinoModal{{ arduino.id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        {% endfor %}
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir o Arduino #{{ arduino.id }}?</p>
+                <p class="text-muted small">Todos os componentes associados também serão removidos.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form action="{{ url_for('excluir_arduino', arduino_id=arduino.id) }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i>Confirmar Exclusão
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>Nenhum Arduino cadastrado.
+                    {% if user == current_user %}
+                        <a href="{{ url_for('assembly_arduinos') }}" class="alert-link">Montar um novo Arduino</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .nav-tabs .nav-link {
+        border: none;
+        color: #495057;
+        font-weight: 500;
+    }
+    .nav-tabs .nav-link.active {
+        color: #6f42c1;
+        border-bottom: 3px solid #6f42c1;
+        background: transparent;
+    }
+    .card {
+        transition: transform 0.2s;
+    }
+    .card:hover {
+        transform: translateY(-2px);
+    }
+    .list-group-item {
+        border-radius: 0.5rem !important;
+        margin-bottom: 0.5rem;
+    }
+</style>
 {% endblock %}

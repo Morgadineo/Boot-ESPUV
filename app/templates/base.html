@@ -1,64 +1,109 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/assembly_arduinos.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/arduino_detalhes.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/editar_registro.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/estatistica.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/manual.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/edit_profile.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
+    <title>ESP UV</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Ícones do Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- V0 (opcional, para componentes rápidos) -->
+    <script src="https://v0.dev/js"></script>
+    <!-- Chart.js (mantido do seu original) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- CSS personalizado (se necessário) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
 </head>
 
 <body>
-    <!-- Cabeçalho com Barra de Navegação -->
-    <header class="top-nav">
-        <div class="header-content">
+    <!-- Barra de Navegação (Navbar) do Bootstrap -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
             {% if exibir_botao_voltar %}
-            <a href="{{ url_for('index') }}" class="back-button">←</a>
+            <a href="{{ url_for('index') }}" class="btn btn-outline-light me-2">
+                <i class="bi bi-arrow-left"></i>
+            </a>
             {% endif %}
-            <h1 class="global-title">ESP UV</h1>
             
-            <nav class="nav-menu">
-                <ul>
-                    <li><a href="{{ url_for('index') }}" title="Página Inicial">⌂ Início</a></li>
-                    <li><a href="{{ url_for('estatistica') }}" title="Estatísticas">📊 Estatísticas</a></li>
-                    <li><a href="{{ url_for('assembly_arduinos') }}" title="AreaDeMontagem">🛠️Área de Montagem</a></li>
-                    <li><a href="{{ url_for('manual') }}" title="Ajuda">❓ Ajuda</a></li>
-                    <li><a href="{{ url_for('user', username=current_user.username) }}" title="Perfil">👤 Perfil</a></li>
-                    <li><a href="{{ url_for('logout') }}" title="Sair">🚪 Sair</a></li>
+            <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">ESP UV</a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}" title="Página Inicial">
+                            <i class="bi bi-house-door"></i> Início
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('estatistica') }}" title="Estatísticas">
+                            <i class="bi bi-bar-chart"></i> Estatísticas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('assembly_arduinos') }}" title="Área de Montagem">
+                            <i class="bi bi-tools"></i> Montagem
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('manual') }}" title="Ajuda">
+                            <i class="bi bi-question-circle"></i> Ajuda
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person"></i> Perfil
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('user', username=current_user.username) }}">
+                                    <i class="bi bi-person-circle"></i> Meu Perfil
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="{{ url_for('logout') }}">
+                                    <i class="bi bi-box-arrow-right"></i> Sair
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
-            </nav>
+            </div>
         </div>
-    </header>
+    </nav>
 
-    <!--
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    <!-- Mensagens Flash (com estilização Bootstrap) -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category | default('info') }} alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     {% endwith %}
-    -->
 
-    <div class="container">
-        {% block content %}
-        {% endblock %}
-    </div>
+    <!-- Conteúdo Principal -->
+    <main class="container my-4">
+        {% block content %}{% endblock %}
+    </main>
 
-    <div class="footer">
-        
-    </div>
+    <!-- Rodapé (opcional) -->
+    <footer class="bg-light py-3 mt-auto">
+        <div class="container text-center">
+            <span class="text-muted">© 2024 ESP UV</span>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS (com Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
+</html>

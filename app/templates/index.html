@@ -1,47 +1,107 @@
 {% extends "base.html" %}
 
 {% block content %}
-<main class="main-content">
-    <!-- Área do Gráfico -->
-    <div id="grafico-uv">
-        <canvas id="uvChart" height="150" ></canvas>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
+<main class="container py-4">
+    <h2 class="h4 fw-bold text-primary mb-4">
+        <i class="bi bi-bar-chart me-2"></i>Coletas semanais
+    </h2>
+
+    <!-- Card do Gráfico -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="chart-container" style="height: 250px;">
+                <canvas id="uvChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">  
+            <div class="table-responsive">
+                <table class="table table-hover table-sm align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Arduino</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Localização</th>
+                            <th scope="col" class="text-end">Frequência<br>(mW/cm²)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for uv_register, location in registers %}
+                        <tr>
+                            <td class="text-muted small">{{ uv_register.id }}</td>
+                            <td>
+                                <span class="badge bg-purple-100 text-purple-800">
+                                    #{{ uv_register.arduino_id }}
+                                </span>
+                            </td>
+                            <td class="small">
+                                {{ uv_register.register_date.strftime('%d/%m/%Y %H:%M') }}
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <span class="fw-bold small">{{ location.city }}</span>
+                                    <span class="text-muted x-small">{{ location.state }}</span>
+                                </div>
+                            </td>
+                            <td class="text-end fw-bold text-primary">
+                                {{ uv_register.frequency }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Configuração do Gráfico (idêntico ao anterior)
     const ctx = document.getElementById('uvChart').getContext('2d');
-    
     new Chart(ctx, {
         type: 'bar',
         data: {
             labels: {{ labels|tojson }},
             datasets: [{
-                label: 'Registros por dia',
+                label: 'Registros',
                 data: {{ values|tojson }},
-                backgroundColor: '#9600ff',
-                borderColor: '#7600cc',
-                borderWidth: 2
+                backgroundColor: '#6f42c1',
+                borderColor: '#5a32a3',
+                borderWidth: 1,
+                borderRadius: 4,
+                barPercentage: 0.6
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 y: {
                     beginAtZero: true,
-                    ticks: {
-                        precision: 0,  // Força números inteiros
-                        stepSize: 1    // Incremento de 1 em 1
-                    },
                     grid: {
-                        display: true,
-                        drawOnChartArea: false,  // Remove linhas internas
-                        drawTicks: true          // Mantém linhas no topo
+                        drawBorder: false,
+                        color: '#f1f1f1'
+                    },
+                    ticks: {
+                        precision: 0,
+                        stepSize: 1
                     }
                 },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
             },
             plugins: {
-                legend: {
-                    display: false
-                },
+                legend: { display: false },
                 tooltip: {
+                    backgroundColor: '#6f42c1',
+                    cornerRadius: 4,
                     callbacks: {
                         label: function(context) {
                             return context.parsed.y + ' registro(s)';
@@ -52,39 +112,12 @@
         }
     });
 });
-    </script>
-    </div>
+</script>
 
-    <!-- Tabela de Dados -->
-    <div id="container-table">
-    <table id="table-dinamic">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Arduino</th>
-                <th>Data</th>
-                <th>Localização</th>
-                <th>Frequência<br>(mW/cm²)</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for uv_register, location in registers %}
-            <tr>
-                <td>{{ uv_register.id }}</td>
-                <td>Arduino #{{ uv_register.arduino_id }}</td>
-                <td>{{ uv_register.register_date.strftime('%d/%m/%Y %H:%M') }}</td>
-                <td>
-                    <div class="location-cell">
-                        <span class="city">{{ location.city }}</span>
-                        <span class="state">{{ location.state }}</span>
-                    </div>
-                </td>
-                <td class="frequency">{{ uv_register.frequency }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    </div>
-</main>
+<style>
+/* Customizações específicas (opcional) */
+.bg-purple-100 { background-color: #e9e1f9; }
+.text-purple-800 { color: #4a1e96; }
+.chart-container { position: relative; }
+</style>
 {% endblock %}
-

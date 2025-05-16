@@ -1,106 +1,307 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="registros-container">
-    <!-- Coluna principal para montagem -->
-    <div class="assembly-column">
-        <div class="assembly-title">Montagem de Arduino</div>
-        
-        <form method="POST" id="arduino-form">
-            {% for category_data in categories_with_components %}
-            <div class="category-dropdown">
-                <div class="dropdown-header">
-                    <span>{{ category_data.category.name }}</span>
-                    <span>▼</span>
-                </div>
-                <div class="dropdown-content">
-                    {% for component in category_data.components %}
-                    <div class="component-item">
-                        <span>{{ component.name }} (R$ {{ "%.2f"|format(component.price) }})</span>
-                        <div class="quantity-controls">
-                            <input type="number" 
-                                   name="component_{{ component.id }}" 
-                                   min="0" 
-                                   value="0"
-                                   class="quantity-input"
-                                   data-component-id="{{ component.id }}"
-                                   data-component-name="{{ component.name }}"
-                                   data-component-price="{{ component.price }}">
+<div class="container-fluid py-4">
+    <div class="row g-4">
+        <!-- Coluna principal de montagem -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="h5 mb-0">
+                            <i class="bi bi-cpu me-2"></i>Montagem de Arduino
+                        </h2>
+                        <div class="search-box" style="width: 250px;">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-search text-muted"></i>
+                                </span>
+                                <input type="text" id="component-search" class="form-control" 
+                                       placeholder="Pesquisar componentes...">
+                                <button class="btn btn-outline-light" type="button" id="clear-search">
+                                    <i class="bi bi-x"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    {% endfor %}
+                </div>
+                <div class="card-body">
+                    <!-- ADICIONE ESTA LINHA COM O CSRF TOKEN -->
+                    <form method="POST" id="arduino-form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        
+                        <div id="categories-container">
+                            {% for category_data in categories_with_components %}
+                            <div class="accordion mb-3 category-item" 
+                                 data-category-name="{{ category_data.category.name|lower }}">
+                                <div class="accordion-item border-0 shadow-sm">
+                                    <h3 class="accordion-header">
+                                        <button class="accordion-button collapsed bg-light" type="button" 
+                                                data-bs-toggle="collapse" 
+                                                data-bs-target="#collapse-{{ category_data.category.id }}" 
+                                                aria-expanded="false">
+                                            <i class="bi bi-tag-fill me-2" style="color: #6f42c1;"></i>
+                                            <strong>{{ category_data.category.name }}</strong>
+                                            <span class="badge bg-purple-100 text-purple-800 ms-2 component-count">
+                                                {{ category_data.components|length }} itens
+                                            </span>
+                                        </button>
+                                    </h3>
+                                    <div id="collapse-{{ category_data.category.id }}" 
+                                         class="accordion-collapse collapse" 
+                                         data-bs-parent="#accordion-{{ category_data.category.id }}">
+                                        <div class="accordion-body pt-0">
+                                            {% for component in category_data.components %}
+                                            <div class="d-flex justify-content-between align-items-center py-2 border-bottom component-item"
+                                                 data-component-name="{{ component.name|lower }}"
+                                                 data-component-id="{{ component.id }}">
+                                                <div>
+                                                    <h5 class="mb-1">{{ component.name }}</h5>
+                                                    <small class="text-muted">R$ {{ "%.2f"|format(component.price) }}</small>
+                                                </div>
+                                                <div class="input-group" style="width: 120px;">
+                                                    <button class="btn btn-outline-primary btn-sm minus-btn" type="button">
+                                                        <i class="bi bi-dash"></i>
+                                                    </button>
+                                                    <input type="number" 
+                                                           name="component_{{ component.id }}" 
+                                                           min="0" 
+                                                           value="0"
+                                                           class="form-control form-control-sm text-center quantity-input"
+                                                           data-component-id="{{ component.id }}"
+                                                           data-component-name="{{ component.name }}"
+                                                           data-component-price="{{ component.price }}">
+                                                    <button class="btn btn-outline-primary btn-sm plus-btn" type="button">
+                                                        <i class="bi bi-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg shadow">
+                                <i class="bi bi-gear-fill me-2"></i>Montar Arduino
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            {% endfor %}
-            
-            <button type="submit" class="btn-submit">Montar Arduino</button>
-        </form>
-    </div>
-    
-    <!-- Coluna lateral com componentes selecionados -->
-    <div class="selected-components-column">
-        <h3>Seu Arduino</h3>
-        <div class="selected-components">
-            <div class="selected-title">Componentes Utilizados</div>
-            <div id="selected-components-list" class="selected-list">
-                <!-- Aqui serão inseridos os componentes dinamicamente via JavaScript -->
-                <p class="empty-message">Nenhum componente selecionado ainda</p>
+        </div>
+        
+        <!-- Coluna lateral de resumo -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 sticky-top" style="top: 20px;">
+                <div class="card-header bg-purple text-white">
+                    <h3 class="h5 mb-0">
+                        <i class="bi bi-pc-display-horizontal me-2"></i>Seu Arduino
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="h6 mb-0">Componentes Selecionados</h4>
+                        <span class="badge bg-primary rounded-pill" id="components-count">0</span>
+                    </div>
+                    
+                    <div id="selected-components-list" class="mb-3">
+                        <div class="text-center py-4 text-muted">
+                            <i class="bi bi-inbox display-6 opacity-25 mb-2"></i>
+                            <p class="mb-0">Nenhum componente selecionado</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card bg-light mt-auto">
+                        <div class="card-body py-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong>Total:</strong>
+                                <span class="h5 mb-0 text-primary" id="total-price">R$ 0,00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+<style>
+    .bg-purple {
+        background-color: #6f42c1 !important;
+    }
+    .accordion-button:not(.collapsed) {
+        background-color: rgba(111, 66, 193, 0.1);
+    }
+    .quantity-input {
+        -moz-appearance: textfield;
+    }
+    .quantity-input::-webkit-outer-spin-button,
+    .quantity-input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    .bg-purple-100 { background-color: #e9e1f9; }
+    .text-purple-800 { color: #4a1e96; }
+    .search-highlight {
+        background-color: #fff8e1;
+        font-weight: bold;
+    }
+    .category-hidden {
+        display: none !important;
+    }
+    .component-hidden {
+        opacity: 0.5;
+        display: none;
+    }
+</style>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const quantityInputs = document.querySelectorAll('.quantity-input');
-    const selectedList = document.getElementById('selected-components-list');
-    
-    quantityInputs.forEach(input => {
-        input.addEventListener('change', function() {
-            updateSelectedComponents();
+    // Controles de quantidade
+    document.querySelectorAll('.plus-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const input = this.parentNode.querySelector('.quantity-input');
+            input.value = parseInt(input.value) + 1;
+            input.dispatchEvent(new Event('change'));
         });
     });
+
+    document.querySelectorAll('.minus-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const input = this.parentNode.querySelector('.quantity-input');
+            if (parseInt(input.value) > 0) {
+                input.value = parseInt(input.value) - 1;
+                input.dispatchEvent(new Event('change'));
+            }
+        });
+    });
+
+    // Sistema de pesquisa
+    const searchInput = document.getElementById('component-search');
+    const clearSearch = document.getElementById('clear-search');
     
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.trim().toLowerCase();
+        
+        if (searchTerm.length > 0) {
+            clearSearch.style.display = 'block';
+            
+            document.querySelectorAll('.category-item').forEach(category => {
+                const categoryName = category.dataset.categoryName;
+                let hasVisibleComponents = false;
+                
+                // Pesquisa nos componentes
+                category.querySelectorAll('.component-item').forEach(component => {
+                    const componentName = component.dataset.componentName;
+                    const componentElement = component.querySelector('h5');
+                    
+                    // Remove highlights anteriores
+                    componentElement.innerHTML = componentElement.textContent;
+                    
+                    if (componentName.includes(searchTerm)) {
+                        component.classList.remove('component-hidden');
+                        hasVisibleComponents = true;
+                        
+                        // Adiciona highlight no texto
+                        const regex = new RegExp(searchTerm, 'gi');
+                        componentElement.innerHTML = componentElement.textContent.replace(
+                            regex, 
+                            match => `<span class="search-highlight">${match}</span>`
+                        );
+                    } else {
+                        component.classList.add('component-hidden');
+                    }
+                });
+                
+                // Mostra/oculta categoria baseado nos resultados
+                if (categoryName.includes(searchTerm) || hasVisibleComponents) {
+                    category.classList.remove('category-hidden');
+                    
+                    // Abre o accordion se estiver fechado
+                    const collapse = category.querySelector('.accordion-collapse');
+                    if (!collapse.classList.contains('show')) {
+                        category.querySelector('.accordion-button').click();
+                    }
+                } else {
+                    category.classList.add('category-hidden');
+                }
+            });
+        } else {
+            clearSearch.style.display = 'none';
+            resetSearch();
+        }
+    });
+    
+    clearSearch.addEventListener('click', function() {
+        searchInput.value = '';
+        searchInput.focus();
+        resetSearch();
+    });
+    
+    function resetSearch() {
+        document.querySelectorAll('.category-item').forEach(category => {
+            category.classList.remove('category-hidden');
+            
+            category.querySelectorAll('.component-item').forEach(component => {
+                component.classList.remove('component-hidden');
+                const componentElement = component.querySelector('h5');
+                componentElement.innerHTML = componentElement.textContent;
+            });
+        });
+    }
+
+    // Atualiza lista de componentes selecionados
+    const quantityInputs = document.querySelectorAll('.quantity-input');
+    const selectedList = document.getElementById('selected-components-list');
+    const componentsCount = document.getElementById('components-count');
+    const totalPrice = document.getElementById('total-price');
+
+    quantityInputs.forEach(input => {
+        input.addEventListener('change', updateSelectedComponents);
+    });
+
     function updateSelectedComponents() {
-        // Limpa a lista
-        selectedList.innerHTML = '';
-        
-        let hasComponents = false;
+        let componentsHTML = '';
         let total = 0;
-        
-        // Percorre todos os inputs
+        let count = 0;
+
         quantityInputs.forEach(input => {
             const quantity = parseInt(input.value);
             if (quantity > 0) {
-                hasComponents = true;
+                count += quantity;
                 const name = input.dataset.componentName;
                 const price = parseFloat(input.dataset.componentPrice);
                 total += price * quantity;
-                
-                // Cria elemento para o componente selecionado
-                const item = document.createElement('div');
-                item.className = 'selected-item';
-                item.innerHTML = `
-                    <span class="selected-item-name">${name}</span>
-                    <span class="selected-item-qty">${quantity}x</span>
+
+                componentsHTML += `
+                    <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                        <div>
+                            <span class="d-block">${name}</span>
+                            <small class="text-muted">R$ ${price.toFixed(2)}</small>
+                        </div>
+                        <span class="badge bg-primary rounded-pill">${quantity}x</span>
+                    </div>
                 `;
-                selectedList.appendChild(item);
             }
         });
-        
-        // Se não houver componentes, mostra mensagem
-        if (!hasComponents) {
-            selectedList.innerHTML = '<p class="empty-message">Nenhum componente selecionado ainda</p>';
+
+        if (count > 0) {
+            selectedList.innerHTML = componentsHTML;
         } else {
-            // Adiciona o total
-            const totalElement = document.createElement('div');
-            totalElement.className = 'selected-total';
-            totalElement.innerHTML = `
-                <span>Total:</span>
-                <span>R$ ${total.toFixed(2)}</span>
+            selectedList.innerHTML = `
+                <div class="text-center py-4 text-muted">
+                    <i class="bi bi-inbox display-6 opacity-25 mb-2"></i>
+                    <p class="mb-0">Nenhum componente selecionado</p>
+                </div>
             `;
-            selectedList.appendChild(totalElement);
         }
+
+        componentsCount.textContent = count;
+        totalPrice.textContent = `R$ ${total.toFixed(2)}`;
     }
 });
 </script>
