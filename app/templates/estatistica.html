@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Cabeçalho -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 fw-bold text-primary">
+            <i class="bi bi-bar-chart me-2"></i>Estatísticas UV
+        </h2>
+    </div>
+
+    <!-- Cards Resumo -->
+    <div class="row g-4 mb-4">
+        <!-- Card Total de Registros -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h3 class="h6 text-muted mb-2">Total de Registros</h3>
+                            <h2 class="h3 mb-0">{{ uv_registers_count }}</h2>
+                        </div>
+                        <span class="badge bg-primary rounded-pill p-2">
+                            <i class="bi bi-database"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Média de Frequência -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h3 class="h6 text-muted mb-2">Média de Frequência</h3>
+                            <h2 class="h3 mb-0">{{ "%.2f"|format(average_frequency) }} <small class="text-muted small">mW/cm²</small></h2>
+                        </div>
+                        <span class="badge bg-warning rounded-pill p-2">
+                            <i class="bi bi-sun"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Arduinos Ativos -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h3 class="h6 text-muted mb-2">Arduinos Ativos</h3>
+                            <h2 class="h3 mb-0">{{ active_arduinos_count }}</h2>
+                        </div>
+                        <span class="badge bg-success rounded-pill p-2">
+                            <i class="bi bi-cpu"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+            <h3 class="h6 mb-0">Média de Frequência UV por Dia</h3>
+        </div>
+        <div class="card-body">
+            <div class="chart-container" style="height: 300px;">
+                <canvas id="uvChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Localizações e Registros Recentes -->
+    <div class="row g-4">
+        <!-- Top Localizações -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white">
+                    <h3 class="h6 mb-0">Top Localizações</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for location, count, avg in top_locations %}
+                        <div class="list-group-item border-0 py-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h4 class="h6 mb-1">{{ location.city }}, {{ location.state }}</h4>
+                                    <small class="text-muted">{{ count }} registros</small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">
+                                    {{ "%.2f"|format(avg) }} mW/cm²
+                                </span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registros Recentes -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white">
+                    <h3 class="h6 mb-0">Registros Recentes</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Local</th>
+                                    <th class="text-end">Frequência</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for register, location in recent_registers %}
+                                <tr>
+                                    <td class="small">
+                                        {{ register.register_date.strftime('%d/%m/%Y %H:%M') }}
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span class="fw-bold small">{{ location.city }}</span>
+                                            <span class="text-muted x-small">{{ location.state }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-end">
+                                        <span class="fw-bold {% if register.frequency > 3 %}text-danger{% else %}text-success{% endif %}">
+                                            {{ "%.2f"|format(register.frequency) }} mW/cm²
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script do Gráfico -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('uvChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ chart_labels|tojson }},
+            datasets: [{
+                label: 'Frequência UV (mW/cm²)',
+                data: {{ chart_values|tojson }},
+                backgroundColor: 'rgba(111, 66, 193, 0.1)',
+                borderColor: '#6f42c1',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.parsed.y.toFixed(2) + ' mW/cm²';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        drawBorder: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Frequência UV (mW/cm²)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+
+<style>
+    .chart-container { position: relative; }
+    .card { border-radius: 0.5rem; }
+    .table th { font-weight: 600; text-transform: uppercase; font-size: 0.75rem; }
+</style>
+{% endblock %}

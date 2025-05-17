@@ -1,0 +1,43 @@
+.container-grid {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.registro-btn {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  
+  .registro-btn button {
+    background-color: #d8b4fe;
+    border: 3px solid #9600ff;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .grid-botoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    max-width: 250px;
+    margin: 0 auto;
+    justify-content: center;
+  }
+  
+  .grid-botoes button {
+    width: 100px;
+    height: 50px;
+    background-color: #d8b4fe;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+  }
+  

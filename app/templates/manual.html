@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Título da página -->
+    <div class="text-center mb-4">
+        <h3 class="text-uv fw-bold">Manuais do Sistema</h3>
+    </div>
+
+    <!-- Lista de Manuais -->
+    <div class="card mb-4 shadow card-uv">
+        <div class="card-body">
+            <h5 class="card-title">📚 Lista de Manuais</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Manual de uso</li>
+                <li class="list-group-item">Guia sensor UV</li>
+                <li class="list-group-item">Como utilizar os dados</li>
+                <li class="list-group-item">Outros documentos relevantes...</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Visualização do Documento -->
+    <div class="card shadow card-uv">
+        <div class="card-body">
+            <h5 class="card-title">📄 Visualização do Documento</h5>
+            <div class="row">
+                <!-- Lateral com páginas -->
+                <div class="col-md-2 text-center">
+                    <div class="list-group">
+                        {% for i in range(1, 9) %}
+                            <a href="#" class="list-group-item list-group-item-action">{{ i }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- Conteúdo de visualização -->
+                <div class="col-md-10">
+                    <p class="text-muted">Aqui você verá o conteúdo do documento selecionado.</p>
+                    <p>..........</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

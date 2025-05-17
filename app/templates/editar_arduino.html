@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">
+            <i class="bi bi-pencil-square me-2"></i>Editar Arduino #{{ arduino.id }}
+        </h1>
+        <a href="{{ url_for('arduino_detalhes', arduino_id=arduino.id) }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>Cancelar
+        </a>
+    </div>
+
+    <form method="POST">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h3 class="h5 mb-0">Informações Básicas</h3>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">Data de Cadastro</label>
+                    <input type="date" class="form-control" name="register_day"
+                        value="{{ arduino.register_day.strftime('%Y-%m-%d') }}">
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h3 class="h5 mb-0">Componentes</h3>
+            </div>
+            <div class="card-body">
+                {% for category_data in categories_with_components %}
+                <div class="accordion mb-3">
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-{{ category_data.category.id }}">
+                                {{ category_data.category.name }}
+                            </button>
+                        </h3>
+                        <div id="collapse-{{ category_data.category.id }}" class="accordion-collapse collapse">
+                            <div class="accordion-body">
+                                {% for component in category_data.components %}
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h5 class="mb-1">{{ component.name }}</h5>
+                                        <small class="text-muted">R$ {{ "%.2f"|format(component.price) }}</small>
+                                    </div>
+                                    <div class="input-group" style="width: 120px;">
+                                        <input type="number" name="component_{{ component.id }}" min="0"
+                                            value="{{ selected_components.get(component.id, 0) }}"
+                                            class="form-control text-center">
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="bi bi-check-circle me-2"></i>Salvar Alterações
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

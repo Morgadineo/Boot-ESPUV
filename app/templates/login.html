@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 80vh;">
+
+    <!-- Imagem do Chip -->
+    <div class="text-center mb-4">
+    <img src="{{ url_for('static', filename='images/chip.png') }}" 
+         alt="ESP32 Chip" 
+         class="img-fluid" 
+         style="max-width: 150px; height: auto;">
+</div>
+
+
+    <!-- Caixa de Login -->
+    <div class="login-box card">
+        <div class="card-body">
+            <h4 class="text-center mb-4">Entrar no Sistema</h4>
+            <form action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+                    {{ form.username.label(class_="form-label") }}
+                    {{ form.username(class_="form-control", placeholder="Nome de usuário") }}
+                    {% for error in form.username.errors %}
+                        <div class="text-danger small">[{{ error }}]</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.password.label(class_="form-label") }}
+                    {{ form.password(class_="form-control", placeholder="Senha") }}
+                    {% for error in form.password.errors %}
+                        <div class="text-danger small">[{{ error }}]</div>
+                    {% endfor %}
+                </div>
+
+                <div class="text-center">
+                    {{ form.submit(class_="btn btn-primary w-100 form-button") }}
+                </div>
+
+                <div class="link-buttons mt-3">
+                    <a href="#" class="small-button">Esqueci a senha</a>
+                    <a href="{{ url_for('register') }}" class="small-button">Cadastre-se</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Botão de Contato -->
+    <div class="contact-container mt-3">
+        <a href="#" class="contact-button">Contato</a>
+    </div>
+
+</div>
+{% endblock %}
