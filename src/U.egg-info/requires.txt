@@ -15,10 +15,18 @@ decorator
 executing
 greenlet
 ipython
+<<<<<<< HEAD
+=======
+flask-shell-ipython
+>>>>>>> upstream/main
 ipython_pygments_lexers
 itsdangerous
 jedi
 Jinja2
+<<<<<<< HEAD
+=======
+pandas
+>>>>>>> upstream/main
 Mako
 MarkupSafe
 matplotlib-inline

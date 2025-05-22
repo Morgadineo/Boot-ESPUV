@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* login.css */
 
 /* Container geral da página de login */
@@ -182,3 +183,130 @@
         padding: 20px;
     }
 }
+=======
+/* login.css */
+
+/* Container geral da página de login */
+.page-container {
+    background-color: #f8e8ff;
+    padding-top: 3vh;
+    padding-bottom: 5vh;
+}
+
+/* Imagem do chip */
+.chip-img {
+    width: 100px;
+    height: auto;
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(160, 61, 227, 0.4);
+    transition: transform 0.3s ease;
+}
+
+.chip-img:hover {
+    transform: scale(1.05);
+}
+
+/* Caixa de login */
+.login-box {
+    background-color: #e5c7ff;
+    border-radius: 15px;
+    border: 3px solid #9600ff;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(160, 61, 227, 0.4);
+}
+
+/* Campos de entrada usando Bootstrap */
+.form-control {
+    border-radius: 10px;
+    border: 2px solid #a77bff;
+    background-color: #f3e9ff;
+    color: #2e2e2e;
+    transition: border 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #9600ff;
+    box-shadow: 0 0 0 0.2rem rgba(150, 0, 255, 0.25);
+    background-color: #f3e9ff;
+}
+
+/* Botão de enviar usando Bootstrap */
+.form-button {
+    background-color: #9600ff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    font-weight: bold;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
+}
+
+.form-button:hover {
+    background-color: #7a00cc;
+}
+
+/* Botões pequenos (Esqueci a senha e Cadastre-se) */
+.link-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.small-button {
+    background-color: #c282ff;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    text-align: center;
+    flex: 1 1 45%;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.small-button:hover {
+    background-color: #a45ae0;
+}
+
+/* Botão de contato */
+.contact-button {
+    background-color: #ffffff;
+    color: #9600ff;
+    padding: 10px 25px;
+    border: 2px solid #9600ff;
+    border-radius: 10px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.contact-button:hover {
+    background-color: #9600ff;
+    color: white;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+    .chip-img {
+        width: 80px;
+    }
+
+    .form-button {
+        font-size: 0.95rem;
+        padding: 8px 20px;
+    }
+
+    .small-button {
+        font-size: 0.85rem;
+        padding: 7px 12px;
+    }
+
+    .login-box {
+        padding: 20px;
+    }
+}
+>>>>>>> upstream/main

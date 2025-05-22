@@ -1,0 +1,46 @@
+body {
+    background: linear-gradient(to bottom, #f0f8ff, #ffffff);
+    color: #333;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.navbar.bg-primary {
+    background-color: #4b6cb7 !important; /* azul arroxeado */
+    background-image: linear-gradient(to right, #4b6cb7, #182848) !important;
+}
+
+.card {
+    border: none;
+    border-radius: 1rem;
+    background-color: #fff;
+}
+
+.btn-primary {
+    background-color: #4b6cb7;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #182848;
+}
+
+a.small-button, .contact-button {
+    display: inline-block;
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: #4b6cb7;
+}
+
+a.small-button:hover, .contact-button:hover {
+    text-decoration: underline;
+}
+
+/* custom.css */
+img {
+    border-radius: 8px;
+}
+
+.chip-img {
+    box-shadow: 0 4px 12px rgba(111, 66, 193, 0.4);
+}
