@@ -1,44 +1,55 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="page-container">
-
-    <div class="chip-image">
-        <img src="{{ url_for('static', filename='images/chip.png') }}" alt="ESP32 Chip" class="chip-img">
+<div class="container-fluid min-vh-100 d-flex flex-column justify-content-between">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-4 text-center">
+            <img src="{{ url_for('static', filename='images/chip.png') }}" alt="ESP32 Chip" class="img-fluid" style="max-height: 150px;">
+        </div>
     </div>
 
-    <div class="login-box">
-        <form action="" method="post" novalidate>
-            {{ form.hidden_tag() }}
-            <p>
-                {{ form.username.label }}<br>
-                {{ form.username(size=32) }}
-                {% for error in form.username.errors %} 
-                    <span class="error">[{{ error }}]</span>
-                {% endfor %}
-            </p>
-
-            <p>
-                {{ form.password.label }}<br>
-                {{ form.password(size=32) }}
-                {% for error in form.password.errors %} 
-                    <span class="error">[{{ error }}]</span>
-                {% endfor %}
-            </p>
-
-            <div class="button-group">
-                {{ form.submit(class_="form-button") }}
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Login</h2>
+                    <form action="" method="post" novalidate>
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            {{ form.username.label(class="form-label") }}
+                            {{ form.username(size=32, class="form-control") }}
+                            {% for error in form.username.errors %}
+                                <div class="invalid-feedback d-block">[{{ error }}]</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            {{ form.password.label(class="form-label") }}
+                            {{ form.password(size=32, class="form-control") }}
+                            {% for error in form.password.errors %}
+                                <div class="invalid-feedback d-block">[{{ error }}]</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="d-grid mb-3">
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="#" class="btn btn-link">Esqueci a senha</a>
+                            <a href="{{ url_for('register') }}" class="btn btn-link">Cadastre-se</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-            <div class="link-buttons">
-                <a href="#" class="small-button">Esqueci a senha</a>
-                <a href="{{ url_for('register') }}" class="small-button">Cadastre-se</a>
-            </div>
-        </form>
+        </div>
     </div>
 
-    <div class="contact-container">
-        <a href="#" class="contact-button">Contato</a>
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-4 text-center">
+            <a href="#" class="btn btn-outline-secondary">Contato</a>
+        </div>
     </div>
 </div>
 {% endblock %}
